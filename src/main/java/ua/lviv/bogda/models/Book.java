@@ -4,23 +4,21 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-public class Person {
+public class Book {
     private int id;
 
     @NotEmpty(message = "Name shouldn't be empty")
     @Size(min = 2, max = 100, message = "Name should be from 2 to 100 lenght")
     private String name;
 
-    @Min(value = 1900, message = "Year should be 1900+")
-    private int year_of_birth;
+    @Min(value = 1500, message = "Year should be 1500+")
+    private int year;
 
-    public Person() {
+    public Book() {}
 
-    }
-
-    public Person(String name, int year_of_birth) {
+    public Book(String name, int year) {
         this.name = name;
-        this.year_of_birth = year_of_birth;
+        this.year = year;
     }
 
     public int getId() {
@@ -39,11 +37,11 @@ public class Person {
         this.name = name;
     }
 
-    public int getYear_of_birth() {
-        return year_of_birth;
+    public int getYear() {
+        return year;
     }
 
-    public void setYear_of_birth(int year_of_birth) {
-        this.year_of_birth = year_of_birth;
+    public void setYear(int year) {
+        this.year = year;
     }
 }

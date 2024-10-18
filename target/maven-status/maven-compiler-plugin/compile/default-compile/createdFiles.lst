@@ -1,0 +1,8 @@
+ua\lviv\bogda\models\Book.class
+ua\lviv\bogda\dao\BookDAO.class
+ua\lviv\bogda\models\Person.class
+ua\lviv\bogda\controllers\BooksController.class
+ua\lviv\bogda\dao\PersonDAO.class
+ua\lviv\bogda\config\MySpringMvcDispatcherSerlvetIntitializer.class
+ua\lviv\bogda\config\SpringConfig.class
+ua\lviv\bogda\controllers\PeopleController.class
