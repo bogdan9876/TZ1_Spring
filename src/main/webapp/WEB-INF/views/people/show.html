@@ -21,6 +21,26 @@
     <hr/>
 </div>
 
+<div th:if="${location}">
+    <span>Location at: </span> <span th:text="${location.getName()}">Location name</span>
+
+    <form th:method="PATCH" th:action="@{/people/{id}/release(id=${person.getId()})}">
+        <input type="submit" value="Release"/>
+    </form>
+</div>
+
+<div th:if="${cities}">
+    <span>Free location </span>
+    <form th:method="PATCH" th:action="@{/people/{id}/assign(id=${person.getId()})}">
+        <label for="city">Choose city:</label>
+        <select th:object="${city}" th:field="*{id}" id="city">
+            <option th:each="city : ${cities}" th:value="${city.getId()}" th:text="${city.getName()}">
+            </option>
+        </select>
+        <input type="submit" value="Attach"/>
+    </form>
+</div>
+
 <form th:method="GET" th:action="@{/people/{id}/edit(id=${person.getId()})}">
     <input type="submit" value="Edit"/>
 </form>

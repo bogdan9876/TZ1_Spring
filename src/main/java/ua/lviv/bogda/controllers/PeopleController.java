@@ -5,11 +5,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ua.lviv.bogda.dao.CitiesDAO;
 import ua.lviv.bogda.dao.PersonDAO;
+import ua.lviv.bogda.models.City;
 import ua.lviv.bogda.models.Person;
 import ua.lviv.bogda.util.PersonValidator;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 
 @Controller
@@ -17,11 +20,13 @@ import javax.validation.Valid;
 public class PeopleController {
 
     private final PersonDAO personDAO;
+    private final CitiesDAO citiesDAO;
     private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(PersonDAO personDAO, PersonValidator personValidator) {
+    public PeopleController(PersonDAO personDAO, CitiesDAO citiesDAO, PersonValidator personValidator) {
         this.personDAO = personDAO;
+        this.citiesDAO = citiesDAO;
         this.personValidator = personValidator;
     }
 
@@ -32,9 +37,17 @@ public class PeopleController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
+    public String show(@PathVariable("id") int id, Model model, @ModelAttribute("city") City city) {
         model.addAttribute("person", personDAO.show(id));
         model.addAttribute("books", personDAO.getBooksByPersonId(id));
+
+        Optional<City> location = personDAO.getLocation(id);
+
+        if (location.isPresent())
+            model.addAttribute("location", location.get());
+        else
+            model.addAttribute("cities", citiesDAO.index());
+
         return "people/show";
     }
 
@@ -75,5 +88,17 @@ public class PeopleController {
     public String delete(@PathVariable("id") int id) {
         personDAO.delete(id);
         return "redirect:/people";
+    }
+
+    @PatchMapping("/{id}/release")
+    public String release(@PathVariable("id") int id) {
+        personDAO.release(id);
+        return "redirect:/people/" + id;
+    }
+
+    @PatchMapping("/{id}/assign")
+    public String release(@PathVariable("id") int id, @ModelAttribute("city") City selectedCity) {
+        personDAO.assign(id, selectedCity);
+        return "redirect:/people/" + id;
     }
 }

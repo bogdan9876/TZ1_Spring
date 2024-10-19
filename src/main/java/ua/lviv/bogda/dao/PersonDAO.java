@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ua.lviv.bogda.models.Book;
+import ua.lviv.bogda.models.City;
 import ua.lviv.bogda.models.Person;
 
 import java.util.List;
@@ -50,5 +51,20 @@ public class PersonDAO {
     public List<Book> getBooksByPersonId(int id) {
         return jdbcTemplate.query("SELECT * FROM Book WHERE person_id=?", new Object[]{id},
                 new BeanPropertyRowMapper<>(Book.class));
+    }
+
+    public Optional<City> getLocation(int id) {
+        return jdbcTemplate.query("SELECT City.* FROM Person JOIN City ON Person.city_id = City.id " +
+                        "WHERE Person.id=?", new Object[]{id},
+                new BeanPropertyRowMapper<>(City.class)).stream().findAny();
+    }
+
+    public void release(int id) {
+        jdbcTemplate.update("UPDATE Person SET city_id=NULL WHERE id=?", id);
+
+    }
+
+    public void assign(int id, City selectedCity) {
+        jdbcTemplate.update("UPDATE Person SET city_id=? WHERE id=?", selectedCity.getId(), id);
     }
 }

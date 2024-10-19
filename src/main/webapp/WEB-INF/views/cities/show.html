@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show</title>
+</head>
+<body>
+<p th:text="${city.getName()}">VALUE</p>
+
+<div th:if="${people.isEmpty()}">
+    <p>Don't have any citizens</p>
+    <hr/>
+</div>
+
+<div th:if="${!people.isEmpty()}">
+    <hr/>
+    <b>People:</b>
+    <table th:each="person : ${people}">
+        <tr th:text="${person.getName()}">person</tr>
+    </table>
+    <hr/>
+</div>
+
+<form th:method="GET" th:action="@{/cities/{id}/edit(id=${city.getId()})}">
+    <input type="submit" value="Edit"/>
+</form>
+
+<form th:method="DELETE" th:action="@{/cities/{id}(id=${city.getId()})}">
+    <input type="submit" value="Delete"/>
+</form>
+
+</body>
+</html>
