@@ -30,19 +30,44 @@ public class PersonDAO {
         return people;
     }
 
-//    public Person show(int id) {
-//        return null;
-//    }
-//
-//    public void save(Person person) {
-//
-//    }
-//
-//    public void update(int id, Person updatedPerson) {
-//
-//    }
-//
-//    public void delete(int id) {
-//
-//    }
+    @Transactional(readOnly = true)
+    public Person show(int id) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Person person = session.createQuery("SELECT p FROM Person p WHERE p.id = :id", Person.class)
+                .setParameter("id", id)
+                .getSingleResult();
+
+        return person;
+    }
+
+    @Transactional
+    public void save(Person person) {
+        Session session = sessionFactory.getCurrentSession();
+        session.save(person);
+    }
+
+    @Transactional
+    public void update(int id, Person updatedPerson) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Person person = session.createQuery("SELECT p FROM Person p WHERE p.id = :id", Person.class)
+                .setParameter("id", id)
+                .getSingleResult();
+        person.setName(updatedPerson.getName());
+        person.setAge(updatedPerson.getAge());
+
+    }
+
+    @Transactional
+    public void delete(int id) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Person person = session.createQuery("SELECT p FROM Person p WHERE p.id = :id", Person.class)
+                .setParameter("id", id)
+                .getSingleResult();
+
+        session.remove(person);
+
+    }
 }
