@@ -15,4 +15,6 @@ public interface BookRepository extends PagingAndSortingRepository<Book, Integer
 
     Page<Book> findAll(Pageable pageable);
 
+    List<Book> findByNameStartingWith(String prefix);
+
 }

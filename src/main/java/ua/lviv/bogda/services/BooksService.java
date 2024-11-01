@@ -43,6 +43,9 @@ public class BooksService {
         return foundBooks.orElse(null);
     }
 
+    public List<Book> findByNameStartingWith(String prefix) {
+        return bookRepository.findByNameStartingWith(prefix);
+    }
 
     public Optional<Person> getBookOwner(int id) {
         Optional<Book> book = bookRepository.findById(id);

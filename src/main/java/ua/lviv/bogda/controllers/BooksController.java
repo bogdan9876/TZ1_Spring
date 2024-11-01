@@ -13,6 +13,9 @@ import ua.lviv.bogda.services.BooksService;
 import ua.lviv.bogda.services.PeopleService;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -63,6 +66,20 @@ public class BooksController {
     @GetMapping("/new")
     public String newPerson(@ModelAttribute("book") Book book) {
         return "books/new";
+    }
+
+    @GetMapping("/search")
+    public String searchBooks(@RequestParam(value = "query", required = false) String query, Model model) {
+        List<Book> books = new ArrayList<>();
+
+        if (query != null && !query.isEmpty()) {
+            books = booksService.findByNameStartingWith(query);
+        }
+
+        model.addAttribute("books", books);
+        model.addAttribute("query", query);
+
+        return "books/search";
     }
 
     @PostMapping()
