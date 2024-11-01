@@ -1,9 +1,7 @@
 package ua.lviv.bogda.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.lviv.bogda.models.Book;
@@ -29,7 +27,15 @@ public class BooksService {
     }
 
     public List<Book> findAll() {
-        return bookRepository.findAll();
+        return (List<Book>) bookRepository.findAll();
+    }
+
+    public Page<Book> findAll(int page, int booksPerPage, boolean sortByYear) {
+        Pageable pageable = sortByYear
+                ? PageRequest.of(page, booksPerPage, Sort.by("year"))
+                : PageRequest.of(page, booksPerPage);
+
+        return bookRepository.findAll(pageable);
     }
 
     public Book findOne(int id) {

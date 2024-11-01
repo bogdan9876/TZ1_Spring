@@ -1,6 +1,8 @@
 package ua.lviv.bogda.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,9 +30,20 @@ public class BooksController {
     }
 
     @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("books", booksService.findAll());
+    public String index(Model model,
+        @RequestParam(value = "page", required = false) Integer page,
+        @RequestParam(value = "books_per_page", required = false) Integer booksPerPage,
+        @RequestParam(value = "sort_by_year", required = false) Boolean sortByYear) {
+
+            if (page != null && booksPerPage != null) {
+                Page<Book> booksPage = booksService.findAll(page, booksPerPage, Boolean.TRUE.equals(sortByYear));
+                model.addAttribute("books", booksPage.getContent());
+            } else {
+                model.addAttribute("books", booksService.findAll());
+            }
+
         return "books/index";
+
     }
 
     @GetMapping("/{id}")
