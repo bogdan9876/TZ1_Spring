@@ -19,8 +19,9 @@
     <span>Free book </span>
     <form th:method="PATCH" th:action="@{/books/{id}/assign(id=${book.getId()})}">
         <label for="person">Choose person:</label>
-        <select name="personId" id="person">
-            <option th:each="person : ${people}" th:value="${person.getId()}" th:text="${person.getName()}"></option>
+        <select th:object="${person}" th:field="*{id}" id="person">
+            <option th:each="person : ${people}" th:value="${person.getId()}" th:text="${person.getName()}">
+            </option>
         </select>
         <input type="submit" value="Attach"/>
     </form>

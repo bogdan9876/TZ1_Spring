@@ -1,6 +1,9 @@
 package ua.lviv.bogda.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.lviv.bogda.models.Book;
@@ -41,6 +44,7 @@ public class BooksService {
         return book.map(Book::getOwner);
     }
 
+    @Transactional
     public void release(int id) {
         Optional<Book> updatedBook = bookRepository.findById(id);
         if (updatedBook.isPresent()) {
@@ -50,6 +54,7 @@ public class BooksService {
         }
     }
 
+    @Transactional
     public void assign(int id, Person selectedPerson) {
         Optional<Book> optionalBook = bookRepository.findById(id);
         if (optionalBook.isPresent()) {

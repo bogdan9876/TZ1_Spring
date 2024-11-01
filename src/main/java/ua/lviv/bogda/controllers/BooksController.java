@@ -91,7 +91,8 @@ public class BooksController {
     }
 
     @PatchMapping("/{id}/assign")
-    public String release(@PathVariable("id") int id, @ModelAttribute("person") Person selectedPerson) {
+    public String assign(@PathVariable("id") int id, @ModelAttribute("person") Person person) {
+        Person selectedPerson = peopleService.findOne(person.getId());
         booksService.assign(id, selectedPerson);
         return "redirect:/books/" + id;
     }
