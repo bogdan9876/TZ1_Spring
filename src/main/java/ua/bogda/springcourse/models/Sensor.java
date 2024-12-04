@@ -1,6 +1,9 @@
 package ua.bogda.springcourse.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -9,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "sensor")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Sensor {
     @Id
     @Column(name = "id")
@@ -21,12 +25,10 @@ public class Sensor {
     private String name;
 
     @OneToMany(mappedBy = "sensor", fetch = FetchType.LAZY)
-    @JsonIgnore
+    @JsonIgnoreProperties("sensor")
     private List<Measurement> measurements;
 
-    public Sensor() {
-
-    }
+    public Sensor() {}
 
     public Sensor(String name) {
         this.name = name;

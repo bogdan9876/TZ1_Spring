@@ -27,11 +27,13 @@ public class MeasurementValidator implements Validator {
     public void validate(Object o, Errors errors) {
         Measurement measurement = (Measurement) o;
 
-        Optional<Object> existingSensor = sensorsService.findByName(measurement.getSensor().getName());
+        String sensorName = measurement.getSensor().getName();
+
+        Optional<Sensor> existingSensor = sensorsService.findByName(sensorName);
         if (existingSensor.isEmpty()) {
-            errors.rejectValue("sensor", "", "Sensor with this name don't exists");
+            errors.rejectValue("sensor", "", "Sensor with this name doesn't exist");
         } else {
-            measurement.setSensor((Sensor) existingSensor.get());
+            measurement.setSensor(existingSensor.get());
         }
     }
 }

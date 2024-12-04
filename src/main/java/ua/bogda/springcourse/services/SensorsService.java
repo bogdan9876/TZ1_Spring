@@ -34,8 +34,7 @@ public class SensorsService {
         sensorsRepository.save(sensor);
     }
 
-    public Optional<Object> findByName(String name) {
-        Optional<Sensor> foundSensor = sensorsRepository.findByName(name);
-        return Optional.ofNullable(foundSensor.orElse(null));
+    public Optional<Sensor> findByName(String name) {
+        return sensorsRepository.findByName(name);
     }
 }
