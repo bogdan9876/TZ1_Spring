@@ -6,6 +6,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import ua.bogda.springcourse.dto.MeasurementDTO;
+import ua.bogda.springcourse.mappers.MeasurementMapper;
 import ua.bogda.springcourse.models.Measurement;
 import ua.bogda.springcourse.models.Sensor;
 import ua.bogda.springcourse.services.MeasurementsService;
@@ -24,21 +25,21 @@ public class MeasurementsController {
     private final MeasurementsService measurementsService;
     private final MeasurementValidator measurementValidator;
     private final SensorsService sensorsService;
-    private final ModelMapper modelMapper;
+    private final MeasurementMapper measurementMapper;
 
     @Autowired
-    public MeasurementsController(MeasurementsService measurementsService, MeasurementValidator measurementValidator, SensorsService sensorsService, ModelMapper modelMapper) {
+    public MeasurementsController(MeasurementsService measurementsService, MeasurementValidator measurementValidator, SensorsService sensorsService, MeasurementMapper measurementMapper) {
         this.measurementsService = measurementsService;
         this.measurementValidator = measurementValidator;
         this.sensorsService = sensorsService;
-        this.modelMapper = modelMapper;
+        this.measurementMapper = measurementMapper;
     }
 
     @GetMapping()
     public List<MeasurementDTO> getMeasurements() {
         List<Measurement> measurements = measurementsService.findAll();
         return measurements.stream()
-                .map(measurement -> modelMapper.map(measurement, MeasurementDTO.class))
+                .map(measurementMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -55,7 +56,7 @@ public class MeasurementsController {
         Sensor sensor = sensorsService.findByName(measurementDTO.getSensorName())
                 .orElseThrow(() -> new IllegalArgumentException("Sensor with this name doesn't exist"));;
 
-        Measurement measurement = modelMapper.map(measurementDTO, Measurement.class);
+        Measurement measurement = measurementMapper.toModel(measurementDTO);
         measurement.setSensor(sensor);
 
         measurementValidator.validate(measurement, bindingResult);

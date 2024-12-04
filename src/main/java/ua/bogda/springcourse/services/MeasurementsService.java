@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.bogda.springcourse.dto.MeasurementDTO;
+import ua.bogda.springcourse.mappers.MeasurementMapper;
 import ua.bogda.springcourse.models.Measurement;
 import ua.bogda.springcourse.repositories.MeasurementsRepository;
 
@@ -18,19 +19,10 @@ import java.util.stream.Collectors;
 public class MeasurementsService {
 
     private final MeasurementsRepository measurementsRepository;
-    private final ModelMapper modelMapper;
 
     @Autowired
-    public MeasurementsService(MeasurementsRepository measurementsRepository, ModelMapper modelMapper) {
+    public MeasurementsService(MeasurementsRepository measurementsRepository) {
         this.measurementsRepository = measurementsRepository;
-        this.modelMapper = modelMapper;
-    }
-
-    public List<MeasurementDTO> findAllAsDTO() {
-        List<Measurement> measurements = measurementsRepository.findAll();
-        return measurements.stream()
-                .map(measurement -> modelMapper.map(measurement, MeasurementDTO.class))
-                .collect(Collectors.toList());
     }
 
     public List<Measurement> findAll() {

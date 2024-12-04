@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ua.bogda.springcourse.dto.SensorDTO;
+import ua.bogda.springcourse.mappers.SensorMapper;
 import ua.bogda.springcourse.models.Sensor;
 import ua.bogda.springcourse.services.SensorsService;
 import ua.bogda.springcourse.util.SensorValidator;
@@ -18,11 +19,13 @@ public class SensorsController {
 
     private final SensorsService sensorsService;
     private final SensorValidator sensorValidator;
+    private final SensorMapper sensorMapper;
 
     @Autowired
-    public SensorsController(SensorsService sensorsService, SensorValidator sensorValidator) {
+    public SensorsController(SensorsService sensorsService, SensorValidator sensorValidator, SensorMapper sensorMapper) {
         this.sensorsService = sensorsService;
         this.sensorValidator = sensorValidator;
+        this.sensorMapper = sensorMapper;
     }
 
     @GetMapping()
@@ -39,8 +42,7 @@ public class SensorsController {
         if (bindingResult.hasErrors())
             return bindingResult.getAllErrors().get(0).getDefaultMessage();
 
-        Sensor sensor = new Sensor();
-        sensor.setName(sensorDTO.getName());
+        Sensor sensor = sensorMapper.toModel(sensorDTO);
 
         sensorsService.save(sensor);
         return "Sensor has been added successfully";
