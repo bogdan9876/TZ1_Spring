@@ -1,11 +1,14 @@
 package ua.bogda.springcourse.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Entity
-@Table(name = "Sensor")
+@Table(name = "sensor")
 public class Sensor {
     @Id
     @Column(name = "id")
@@ -16,6 +19,10 @@ public class Sensor {
     @Size(min = 3, max = 30, message = "Size should be in the 3 to 30 range")
     @Column(name = "name")
     private String name;
+
+    @OneToMany(mappedBy = "sensor", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Measurement> measurements;
 
     public Sensor() {
 
@@ -41,4 +48,11 @@ public class Sensor {
         this.name = name;
     }
 
+    public List<Measurement> getMeasurements() {
+        return measurements;
+    }
+
+    public void setMeasurements(List<Measurement> measurements) {
+        this.measurements = measurements;
+    }
 }
